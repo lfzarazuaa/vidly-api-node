@@ -9,9 +9,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const movies = await Movie.find()
-    .select("-__v")
-    .sort("name");
+  const movies = await Movie.find().select("-__v").sort("name");
   res.send(movies);
 });
 
@@ -26,11 +24,12 @@ router.post("/", [auth], async (req, res) => {
     title: req.body.title,
     genre: {
       _id: genre._id,
-      name: genre.name
+      name: genre.name,
     },
     numberInStock: req.body.numberInStock,
     dailyRentalRate: req.body.dailyRentalRate,
-    publishDate: moment().toJSON()
+    publishDate: moment().toJSON(),
+    isLikeSelected: req.body.isLikeSelected,
   });
   await movie.save();
 
@@ -50,10 +49,11 @@ router.put("/:id", [auth], async (req, res) => {
       title: req.body.title,
       genre: {
         _id: genre._id,
-        name: genre.name
+        name: genre.name,
       },
       numberInStock: req.body.numberInStock,
-      dailyRentalRate: req.body.dailyRentalRate
+      dailyRentalRate: req.body.dailyRentalRate,
+      isLikeSelected: req.body.isLikeSelected,
     },
     { new: true }
   );
